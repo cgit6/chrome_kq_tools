@@ -82,63 +82,63 @@ if (!window.__LAZYLOAD_INSTALLED__) {
       triggerLazyLoad() {
         console.log("🔁 觸發懶加載...");
 
-        // const originalPosition =
-        //   window.pageYOffset || document.documentElement.scrollTop;
+        const originalPosition =
+          window.pageYOffset || document.documentElement.scrollTop;
 
-        // // 1. 觸發 scroll 事件
-        // window.dispatchEvent(new Event("scroll"));
+        // 1. 觸發 scroll 事件
+        window.dispatchEvent(new Event("scroll"));
 
-        // // 2. 嘗試更新 lazyLoadInstance（如有）
-        // if (window.lazyLoadInstance) {
-        //   try {
-        //     window.lazyLoadInstance.update();
-        //     console.log("✅ LazyLoad 實例已更新");
-        //   } catch (e) {
-        //     console.log("❌ LazyLoad 更新失敗: " + e.message);
-        //   }
-        // }
+        // 2. 嘗試更新 lazyLoadInstance（如有）
+        if (window.lazyLoadInstance) {
+          try {
+            window.lazyLoadInstance.update();
+            console.log("✅ LazyLoad 實例已更新");
+          } catch (e) {
+            console.log("❌ LazyLoad 更新失敗: " + e.message);
+          }
+        }
 
-        // // 3. 觸發頁面上的特定事件
-        // if (document.getElementById("main")) {
-        //   try {
-        //     const events = [
-        //       "bills-loaded",
-        //       "bills-list-loaded",
-        //       "before-scrolling-to-page-bottom",
-        //     ];
-        //     events.forEach((event) => {
-        //       document.getElementById("main").dispatchEvent(new Event(event));
-        //       console.log(`📣 已觸發事件: ${event}`);
-        //     });
-        //   } catch (e) {
-        //     console.log("❌ 觸發自定義事件失敗: " + e.message);
-        //   }
-        // }
+        // 3. 觸發頁面上的特定事件
+        if (document.getElementById("main")) {
+          try {
+            const events = [
+              "bills-loaded",
+              "bills-list-loaded",
+              "before-scrolling-to-page-bottom",
+            ];
+            events.forEach((event) => {
+              document.getElementById("main").dispatchEvent(new Event(event));
+              console.log(`📣 已觸發事件: ${event}`);
+            });
+          } catch (e) {
+            console.log("❌ 觸發自定義事件失敗: " + e.message);
+          }
+        }
 
-        // // 4. 判斷是否應該執行實際滾動
-        // if (this.config.useActualScroll && this.canPerformScroll()) {
-        //   this.performScroll(originalPosition);
-        // } else if (this.config.useActualScroll) {
-        //   console.log("⏩ 偵測到使用者正在操作，跳過實際滾動");
-        // }
+        // 4. 判斷是否應該執行實際滾動
+        if (this.config.useActualScroll && this.canPerformScroll()) {
+          this.performScroll(originalPosition);
+        } else if (this.config.useActualScroll) {
+          console.log("⏩ 偵測到使用者正在操作，跳過實際滾動");
+        }
       }
 
       // ❗ 要改
       handleUserScroll() {
         console.log("🔁 使用者正在滾動...");
 
-        // if (!this.state.active || this.state.isScriptScrolling) return;
+        if (!this.state.active || this.state.isScriptScrolling) return;
 
-        // this.state.isUserScrolling = true;
-        // this.state.lastUserScrollTime = Date.now();
+        this.state.isUserScrolling = true;
+        this.state.lastUserScrollTime = Date.now(); // 當前時間
 
-        // console.log("🖱️ 使用者正在滾動中...");
+        console.log("🖱️ 使用者正在滾動中...");
 
-        // clearTimeout(this.state.scrollTimer);
-        // this.state.scrollTimer = setTimeout(() => {
-        //   this.state.isUserScrolling = false;
-        //   console.log("✅ 使用者已停止滾動");
-        // }, 150);
+        clearTimeout(this.state.scrollTimer);
+        this.state.scrollTimer = setTimeout(() => {
+          this.state.isUserScrolling = false;
+          console.log("✅ 使用者已停止滾動");
+        }, 150);
       }
 
       // 添加其他功能...
