@@ -1,31 +1,34 @@
+// 匯出懶加載觸發器函數
 export function lazyLoadTrigger() {
-  // ===== 配置项 =====
+  // ===== 配置項 =====
   const config = {
-    interval: 3000, // 触发间隔（毫秒）
-    stepCount: 10, // 触发总次数
-    debug: true, // 是否打印日志
-    useActualScroll: true, // 是否使用实际滚动
-    scrollAmount: 100, // 滚动距离
-    restoreDelay: 10, // 恢复位置延迟
-    detectUserScrolling: true, // 是否检测用户滚动
-    userScrollPauseTime: 1500, // 用户滚动后暂停时间
+    interval: 3000, // 每次觸發間隔（毫秒）
+    stepCount: 10, // 最多觸發幾次
+    debug: true, // 是否輸出除錯訊息(影響到 utils 工具)
+    useActualScroll: true, // 是否進行實際的滾動操作
+    scrollAmount: 100, // 滾動的距離（像素）
+    restoreDelay: 10, // 滾動後多久復原原來的位置（毫秒）
+    detectUserScrolling: true, // 是否偵測使用者是否手動滾動
+    userScrollPauseTime: 1500, // 使用者滾動後需等待的冷卻時間（毫秒）
   };
 
-  // ===== 状态管理 =====
+  // ===== 狀態管理 =====
   const state = {
-    isUserScrolling: false,
-    lastUserScrollTime: 0,
-    scrollTimer: null,
-    isScriptScrolling: false,
-    triggerInterval: null,
+    isUserScrolling: false, // 是否偵測到使用者在滾動中
+    lastUserScrollTime: 0, // 最近一次使用者滾動的時間戳
+    scrollTimer: null, // 偵測使用者停止滾動的 timer
+    isScriptScrolling: false, // 是否目前是腳本觸發的滾動
+    triggerInterval: null, // 主要的觸發 setInterval 控制器
   };
 
-  // ===== 工具函数 =====
+  // ===== 工具函數區塊 =====
   const utils = {
+    // 日誌輸出（僅在 debug 模式下）
     log(message) {
-      if (config.debug) console.log("[懒加载触发器] " + message);
+      if (config.debug) console.log("[懶加載觸發器] " + message);
     },
 
+    // 搜尋頁面上所有懶加載相關的圖片元素
     getLazyElements() {
       return document.querySelectorAll(
         'img[data-src], img.lazy, img[loading="lazy"]'
@@ -33,30 +36,36 @@ export function lazyLoadTrigger() {
     },
   };
 
-  // ===== 滚动检测 =====
+  // ===== 使用者滾動偵測功能區塊 =====
   const scrollDetection = {
+    // 初始化事件監聽器來偵測使用者手動滾動
     setup() {
-      if (!config.detectUserScrolling) return;
+      if (!config.detectUserScrolling) return; // 如果不需要偵測使用者滾動，則直接返回
 
-      utils.log("启用用户滚动检测");
+      utils.log("啟用使用者滾動偵測");
 
+      // 監聽 scroll 事件
       window.addEventListener(
         "scroll",
         () => {
+          // 如果目前不是腳本觸發的滾動
           if (!state.isScriptScrolling) {
+            // 使用者觸發的滾動才紀錄
             state.isUserScrolling = true;
             state.lastUserScrollTime = Date.now();
 
+            // 重置偵測 timer
             clearTimeout(state.scrollTimer);
             state.scrollTimer = setTimeout(() => {
               state.isUserScrolling = false;
-              utils.log("用户已停止滚动");
-            }, 150);
+              utils.log("使用者已停止滾動");
+            }, 150); // 若 150ms 內無滾動事件視為停止
           }
         },
         { passive: true }
       );
 
+      // 手機觸控滾動
       window.addEventListener(
         "touchmove",
         () => {
@@ -69,18 +78,21 @@ export function lazyLoadTrigger() {
       );
     },
 
+    // 檢查是否可以由腳本進行滾動
     canPerformScroll() {
       if (!config.detectUserScrolling) return true;
 
+      // 若使用者正在滾動，禁止腳本滾動
       if (state.isUserScrolling) {
-        utils.log("用户正在滚动，跳过实际滚动操作");
+        utils.log("使用者正在滾動，跳過實際滾動操作");
         return false;
       }
 
+      // 若使用者剛剛滾動過，則等待一段冷卻時間
       const timeSinceLastScroll = Date.now() - state.lastUserScrollTime;
       if (timeSinceLastScroll < config.userScrollPauseTime) {
         utils.log(
-          "用户刚刚滚动过，还需等待" +
+          "使用者剛剛滾動過，還需等待 " +
             (config.userScrollPauseTime - timeSinceLastScroll) +
             "ms"
         );
@@ -91,28 +103,30 @@ export function lazyLoadTrigger() {
     },
   };
 
-  // ===== 懒加载触发器 =====
+  // ===== 懶加載觸發邏輯 =====
   const lazyLoader = {
+    // 主觸發方法
     triggerLazyLoad() {
-      utils.log("触发懒加载");
+      utils.log("觸發懶加載");
 
+      // 記錄當前滾動位置以便還原
       const originalPosition =
         window.pageYOffset || document.documentElement.scrollTop;
 
-      // 1. 触发scroll事件
+      // 1. 模擬 scroll 事件（部分框架依賴此事件加載圖片）
       window.dispatchEvent(new Event("scroll"));
 
-      // 2. 更新LazyLoad实例
+      // 2. 若有 LazyLoad 實例則調用其更新方法
       if (window.lazyLoadInstance) {
         try {
           window.lazyLoadInstance.update();
-          utils.log("LazyLoad实例已更新");
+          utils.log("LazyLoad 實例已更新");
         } catch (e) {
-          utils.log("LazyLoad更新失败: " + e.message);
+          utils.log("LazyLoad 更新失敗: " + e.message);
         }
       }
 
-      // 3. 触发特定事件
+      // 3. 手動派發自定義事件（部分頁面依賴）
       if (document.getElementById("main")) {
         try {
           const events = [
@@ -124,93 +138,102 @@ export function lazyLoadTrigger() {
             document.getElementById("main").dispatchEvent(new Event(event));
           });
         } catch (e) {
-          utils.log("触发特定事件失败: " + e.message);
+          utils.log("觸發自定義事件失敗: " + e.message);
         }
       }
 
-      // 4. 执行实际滚动
+      // 4. 執行實際滾動操作（模擬用戶操作）
       if (config.useActualScroll && scrollDetection.canPerformScroll()) {
         this.performScroll(originalPosition);
       } else if (config.useActualScroll) {
-        utils.log("跳过实际滚动，仅使用事件触发");
+        utils.log("跳過實際滾動，僅使用事件觸發");
       }
     },
 
+    // 執行模擬滾動並還原原本位置
     performScroll(originalPosition) {
       try {
-        state.isScriptScrolling = true;
+        state.isScriptScrolling = true; // 設置為腳本滾動狀態
 
+        // 滾動一定距離
         window.scrollBy({
-          top: config.scrollAmount,
-          behavior: "auto",
+          top: config.scrollAmount, // 滾動的距離
+          behavior: "auto", // 滾動行為
         });
 
+        // 延遲後滾回原位
         setTimeout(() => {
           window.scrollTo({
-            top: originalPosition,
-            behavior: "auto",
+            top: originalPosition, // 滾回原來的位置
+            behavior: "auto", // 滾動行為
           });
 
+          // 滾回後設定為非腳本滾動狀態
           setTimeout(() => {
-            state.isScriptScrolling = false;
+            state.isScriptScrolling = false; // 設置為非腳本滾動狀態
           }, 50);
         }, config.restoreDelay);
       } catch (e) {
         state.isScriptScrolling = false;
-        utils.log("滚动操作失败: " + e.message);
+        utils.log("滾動操作失敗: " + e.message);
       }
     },
   };
 
-  // ===== 主控制器 =====
+  // ===== 控制器（start/stop） =====
   const controller = {
+    // 啟動主流程
     start() {
-      utils.log("开始执行懒加载触发 (每3秒触发一次)");
+      utils.log("開始執行懶加載觸發 (每3秒觸發一次)");
 
-      const initialElements = utils.getLazyElements();
-      utils.log("发现" + initialElements.length + "个可能的懒加载元素");
+      const initialElements = utils.getLazyElements(); // 獲取所有可能的懶加載元素
+      utils.log("發現 " + initialElements.length + " 個可能的懶加載元素");
 
-      scrollDetection.setup();
+      scrollDetection.setup(); // 設置滾動偵測
 
-      let counter = 0;
+      let counter = 0; // 計數器
       state.triggerInterval = setInterval(() => {
         counter++;
-        utils.log("执行第 " + counter + "/" + config.stepCount + " 次触发");
+        utils.log("執行第 " + counter + "/" + config.stepCount + " 次觸發");
 
         lazyLoader.triggerLazyLoad();
 
+        // 若次數達到上限，則停止觸發
         if (counter >= config.stepCount) {
           this.stop();
           const finalElements = utils.getLazyElements();
-          utils.log("最终还有" + finalElements.length + "个未加载的懒加载元素");
+          utils.log(
+            "最終還有 " + finalElements.length + " 個未加載的懶加載元素"
+          );
         }
       }, config.interval);
     },
 
+    // 停止主流程
     stop() {
       if (state.triggerInterval) {
         clearInterval(state.triggerInterval);
         state.triggerInterval = null;
-        utils.log("懒加载触发已停止");
+        utils.log("懶加載觸發已停止");
       }
     },
   };
 
-  // ===== 初始化 =====
-  utils.log("懒加载触发脚本已加载");
+  // ===== 初始化流程 =====
+  utils.log("懶加載觸發腳本已加載");
 
   if (document.readyState === "complete") {
-    utils.log("页面已加载完成，立即开始");
-    setTimeout(() => controller.start(), 500);
+    utils.log("頁面已加載完成，立即開始");
+    setTimeout(() => controller.start(), 500); // 延遲 0.5 秒開始
   } else {
-    utils.log("等待页面加载完成...");
+    utils.log("等待頁面加載完成...");
     window.addEventListener("load", () => {
-      utils.log("页面加载完成，开始执行");
-      setTimeout(() => controller.start(), 500);
+      utils.log("頁面加載完成，開始執行");
+      setTimeout(() => controller.start(), 500); // 延遲 0.5 秒開始
     });
   }
 
-  // ===== 导出控制接口 =====
+  // ===== 提供全域控制介面 =====
   window.lazyLoadControl = {
     start: () => controller.start(),
     stop: () => controller.stop(),

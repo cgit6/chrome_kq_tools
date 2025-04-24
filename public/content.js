@@ -10,11 +10,11 @@ if (!window.__LAZYLOAD_INSTALLED__) {
       constructor(config) {
         this.config = config;
         this.state = {
-          active: false,
-          scrollTimeouts: new Set(),
-          abortController: null,
-          intervalId: null,
-        };
+          active: false, // 是否啟用
+          scrollTimeouts: new Set(), // 滾動相關的定時器
+          abortController: null, // 中止控制器
+          intervalId: null, // 定時器ID
+        }; // 狀態
         this.handleScrollBound = this.handleUserScroll.bind(this); // 我記得在這邊用 bind 是一個技巧
         this.setupEventListeners();
       }
