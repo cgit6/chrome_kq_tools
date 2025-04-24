@@ -2,7 +2,7 @@
 // 全局控制器映射表
 const tabControllers = new Map();
 
-// 每當有訊息(TOGGLE_LAZY_LOAD) 傳到 background.js 就會觸發產生這個物件
+// lazyload 相關的東西，每當有訊息(TOGGLE_LAZY_LOAD) 傳到 background.js 就會觸發產生這個物件
 class LazyLoadController {
   constructor(tabId) {
     this.tabId = tabId;
