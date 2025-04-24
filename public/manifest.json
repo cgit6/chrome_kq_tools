@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Chat Extension",
+  "version": "1.0",
+  "description": "在网页右下角显示按钮，点击弹出聊天窗口",
+  "permissions": ["activeTab", "scripting", "tabs", "storage"],
+  "host_permissions": ["*://*.jambolive.tv/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.jambolive.tv/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["app.js", "app.css", "assets/*"],
+      "matches": ["*://*.jambolive.tv/*"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}
