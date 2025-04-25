@@ -1,15 +1,25 @@
 /* src/components/ExcelUploader/ExcelUploader.css */
 .excel-uploader {
-  padding: 15px;
-  background: #f5f5f5;
-  border-radius: 8px;
-  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+/* 寬版上傳器樣式 */
+.wide-uploader {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .upload-container {
   display: flex;
   gap: 10px;
   align-items: center;
+  width: 100%;
+  justify-content: center;
 }
 
 .file-input {
@@ -33,12 +43,14 @@
 }
 
 .upload-button {
-  padding: 8px 16px;
-  background: #4CAF50;
+  padding: 10px 20px;
+  background-color: #DB5882;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
 }
 
 .upload-button:disabled {
@@ -46,6 +58,163 @@
   cursor: not-allowed;
 }
 
-.upload-button:hover:not(:disabled) {
-  background: #45a049;
+.upload-button:hover {
+  background-color: #F2A6B5;
 }
+
+.error-message {
+  color: #d32f2f;
+  background-color: #ffebee;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+  text-align: center;
+  max-width: 400px;
+}
+
+/* 狀態訊息樣式 */
+.status-message {
+  margin-top: 15px;
+  padding: 12px;
+  background-color: #e8f4f8;
+  border-left: 4px solid #3498db;
+  border-radius: 4px;
+  color: #333;
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* 進度顯示樣式 */
+.progress-display {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  color: #555;
+  font-size: 14px;
+  font-weight: 500;
+  width: 100%;
+  text-align: center;
+}
+
+/* 處理成功的消息 */
+.success-message {
+  color: #4CAF50;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* 從 ExcelUploader.module.css 合併的樣式 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 80%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.excel-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.excel-table th,
+.excel-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.excel-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.excel-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.excel-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+.container {
+  padding: 20px;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 新增的數據顯示樣式 */
+/* .data-display {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 800px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: white;
+} */
+
+/* .data-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+} */
+
+.data-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+}
+
+.close-button:hover {
+  color: #333;
+}
+
+

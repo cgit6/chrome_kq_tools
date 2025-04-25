@@ -20,13 +20,13 @@
   "content_scripts": [
     {
       "matches": ["*://*.jambolive.tv/*"],
-      "js": ["content.js"],
+      "js": ["lazyLoadTrigger.js"], 
       "run_at": "document_idle"
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["app.js", "app.css", "assets/*"],
+      "resources": ["app.js", "app.css", "assets/*", "helloboy.png"],
       "matches": ["*://*.jambolive.tv/*"]
     }
   ],

@@ -19,6 +19,8 @@ async function copyFiles() {
       ["public/icon48.png", "dist/icon48.png"],
       ["public/icon128.png", "dist/icon128.png"],
       ["scripts/lazyLoadTrigger.js", "dist/lazyLoadTrigger.js"],
+      ["public/background.js", "dist/background.js"],
+      ["public/content.js", "dist/content.js"],
     ];
 
     // 复制所有文件

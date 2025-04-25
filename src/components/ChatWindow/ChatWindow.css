@@ -1,32 +1,18 @@
-.chat-container {
-  position: relative;
-  z-index: 99999;
-}
-
-.chat-button {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: none;
-  transition: all 0.3s ease;
+.chat-window {
   position: fixed;
-  bottom: 15px;
-  right: 0;
+  bottom: 100px;
+  right: 30px;
+  width: 320px;
+  height: 450px;
+  background-color: rgb(216, 216, 216);
+  border-radius: 10px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideIn 0.3s ease;
   z-index: 99999;
-  opacity: 0.9;
 }
-
-.chat-button:hover {
-  transform: scale(1.1);
-  opacity: 1;
-}
-
 
 @keyframes slideIn {
   from {
@@ -70,4 +56,5 @@
   padding: 15px;
   overflow-y: auto;
   height: calc(100% - 50px); /* 减去header的高度 */
-} 
+  background-color: #f8f9fa; /* 背景顏色 */
+}
