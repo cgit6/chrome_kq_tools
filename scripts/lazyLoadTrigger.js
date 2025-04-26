@@ -4,7 +4,7 @@
 const config = {
   interval: 3000, // 每次觸發間隔（毫秒）
   stepCount: 10000, // 最多觸發幾次
-  debug: true, // 是否輸出除錯訊息(影響到 utils 工具)
+  debug: false, // 是否輸出除錯訊息(影響到 utils 工具)
   useActualScroll: true, // 是否進行實際的滾動操作
   scrollAmount: 100, // 滾動的距離（像素）
   restoreDelay: 10, // 滾動後多久復原原來的位置（毫秒）

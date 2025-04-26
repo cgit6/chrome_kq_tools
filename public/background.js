@@ -3,6 +3,7 @@
 const tabControllers = new Map(); // 用來儲存 LazyLoadController 實例
 
 // lazyload 相關的東西，每當有訊息(TOGGLE_LAZY_LOAD) 傳到 background.js 就會觸發產生這個物件
+// 這個物件是用來處理
 class LazyLoadController {
   constructor(tabId) {
     this.tabId = tabId; // 標籤頁的 ID
@@ -19,15 +20,16 @@ class LazyLoadController {
     // 注入 script
     chrome.scripting.executeScript(
       {
-        target: { tabId: this.tabId }, // 注入的目標
+        target: { tabId: this.tabId }, // 注入的目標分頁
         files: ["content.js"], // 注入的腳本
       },
       (results) => {
-        // 檢查腳本是否成功注入
+        // 檢查腳本是否成功注入(如果有錯誤)
         if (chrome.runtime.lastError) {
           console.error(`腳本注入失敗: ${chrome.runtime.lastError.message}`);
-          return;
+          return; // 如果注入失敗，則不進行下一步
         }
+        // 傳送訊息給目標(tabId)
         chrome.tabs.sendMessage(
           this.tabId,
           {
@@ -35,7 +37,7 @@ class LazyLoadController {
             config: {
               interval: 3000, // 每3秒觸發一次
               stepCount: 10, // 最多觸發10次
-              debug: true, // 是否開啟 debug 模式
+              debug: false, // 是否開啟 debug 模式
               useActualScroll: true, // 是否進行實際滾動
               scrollAmount: 100, // 滾動距離
               restoreDelay: 10, // 恢復延遲
@@ -95,6 +97,7 @@ const stateManager = {
 // message(收到的訊息內容，是個物件)、sender(誰傳來這個訊息，裡面包含 tab.id)、sendResponse(可以用來回傳資料給發訊人)
 // 在過程中添加判斷訊息的來源，判斷是從 popup 或是 content 送來的，因為 popup 沒有 tab id 所以會出現錯誤
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // 處理切換 lazyload 開關
   const handleToggle = async (tabId) => {
     await stateManager.setEnabledState(message.enabled); // 設置啟用狀態
 
@@ -136,7 +139,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 // 注入 React 组件的函数
 function injectReactApp(tabId) {
-  console.log("开始注入 React 应用");
+  console.log("开始注入。React 应用");
 
   // 1. 创建挂载点
   chrome.scripting
@@ -199,8 +202,8 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
       }
 
       // 創建新的控制器
-      const controller = new LazyLoadController(tabId);
-      tabControllers.set(tabId, controller);
+      const controller = new LazyLoadController(tabId); // 創建 LazyLoadController 實例
+      tabControllers.set(tabId, controller); // 添加一筆資料
     }
 
     // 其他的組件

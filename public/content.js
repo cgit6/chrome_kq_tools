@@ -15,24 +15,24 @@ if (!window.__LAZYLOAD_INSTALLED__) {
       constructor(config) {
         // 配置項
         this.config = {
-          interval: config.interval || 3000,
-          stepCount: config.stepCount || 10,
-          debug: config.debug || true,
-          useActualScroll: true,
-          scrollAmount: 100,
-          restoreDelay: 10,
-          detectUserScrolling: true,
-          userScrollPauseTime: 1500,
+          interval: config.interval || 3000, // 觸發間隔
+          stepCount: config.stepCount || 10, // 觸發次數
+          debug: typeof config.debug !== "undefined" ? config.debug : true, // 是否輸出除錯訊息
+          useActualScroll: true, // 是否進行實際的滾動操作
+          scrollAmount: 100, // 滾動的距離（像素）
+          restoreDelay: 10, // 滾動後多久復原原來的位置（毫秒）
+          detectUserScrolling: true, // 是否偵測使用者滾動
+          userScrollPauseTime: 1500, // 使用者滾動後多久後可以再次滾動（毫秒）
         };
 
         // 狀態管理
         this.state = {
-          isUserScrolling: false,
-          lastUserScrollTime: 0,
-          scrollTimer: null,
-          isScriptScrolling: false,
-          triggerInterval: null,
-          active: false,
+          isUserScrolling: false, // 是否使用者正在滾動
+          lastUserScrollTime: 0, // 使用者最後一次滾動的時間
+          scrollTimer: null, // 滾動計時器
+          isScriptScrolling: false, // 是否腳本正在滾動
+          triggerInterval: null, // 觸發計時器
+          active: false, // 是否啟動
         };
 
         this.handleScrollBound = this.handleUserScroll.bind(this);
@@ -281,11 +281,13 @@ if (!window.__LAZYLOAD_INSTALLED__) {
   // 設置消息監聽器
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === "INIT_LAZY_LOAD") {
+      // 如果已經有實例，則停止
       if (window.lazyLoader) {
         window.lazyLoader.stop();
         delete window.lazyLoader;
       }
 
+      // 如果配置有間隔和步數，則創建實例並啟動
       if (message.config?.interval && message.config?.stepCount) {
         window.lazyLoader = new window.LazyLoader(message.config);
         window.lazyLoader.start();

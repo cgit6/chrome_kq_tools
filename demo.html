@@ -495,22 +495,35 @@
 </script>
 
 <script id="ship_order" type="x-tmpl-mustache">
+
+<!-- 第一筆資料 -->
 <tr>
   <td>
+    <!-- checkbox -->
     <label class="manage-checkbox">
       <input type="checkbox" class="[[# from_allowance ]]allowance_[[ /from_allowance ]]order-checkbox" name="[[# from_allowance ]]allowance_[[ /from_allowance ]]orders" value="[[ id ]]" />
       <span class="manage-checkmark"></span>
     </label>
   </td>
   [[ ^from_allowance ]]
+
+  <!-- 大頭照圖片 -->
   <td>
     <img src="[[ photo ]]" alt="" class="manage-table-cover "/>
   </td>
+
+  <!-- 訂單筆數 -->
   <td>
     <h3>[[ name ]]</h3>
   </td>
+
+  <!-- 訂單編號 -->
   <td>
     <p class="theme align-c">[[ serial ]]</p>
+  </td>
+
+  <!-- 銷退 -->
+  <td>
     [[ #returnwarehousedate ]]
     <span>(已銷退)</span>
     [[ /returnwarehousedate ]]
@@ -1439,14 +1452,14 @@ $('#id_setting_user').click(function () {
          data-bills-loader-sessions=""
          data-bills-loader-commodities=""
          data-bills-loader-la="all"
-         data-bills-loader-begin="2025/04/20 00:00"
-         data-bills-loader-end="2025/04/23 00:00"
-         data-bills-loader-pay_begin="2025/04/20 00:00"
-         data-bills-loader-pay_end="2025/04/23 00:00"
-         data-bills-loader-shipnotes_checkout_begin="2025/04/20 00:00"
-         data-bills-loader-shipnotes_checkout_end="2025/04/23 00:00"
-         data-bills-loader-refunds_refund_begin="2025/04/20 00:00"
-         data-bills-loader-refunds_refund_end="2025/04/23 00:00"
+         data-bills-loader-begin="2025/04/24 00:00"
+         data-bills-loader-end="2025/04/27 00:00"
+         data-bills-loader-pay_begin="2025/04/24 00:00"
+         data-bills-loader-pay_end="2025/04/27 00:00"
+         data-bills-loader-shipnotes_checkout_begin="2025/04/24 00:00"
+         data-bills-loader-shipnotes_checkout_end="2025/04/27 00:00"
+         data-bills-loader-refunds_refund_begin="2025/04/24 00:00"
+         data-bills-loader-refunds_refund_end="2025/04/27 00:00"
          data-bills-loader-serial=""
          data-bills-loader-multi_from_name=""
          data-bills-loader-fb=""
@@ -1466,21 +1479,21 @@ $('#id_setting_user').click(function () {
          data-bills-loader-invoice_number=""
          data-bills-loader-completed="false"
          data-bills-loader-method="GET"
-         data-bills-loader-default_order_by="asc"
-         data-bills-loader-default_order_item="amount"
+         data-bills-loader-default_order_by="desc"
+         data-bills-loader-default_order_item="date"
          data-bills-loader-amount_limit_lower=""
          data-bills-loader-amount_limit_upper=""
          data-bills-loader-has_shipped_time=""
          data-bills-loader-is_prepared=""
          data-bills-loader-ship_info_in_blacklist=""
          data-bills-loader-skip_check="False"
-         data-bills-loader-csrf-token="RiJirLpMjhJj6N9yKthaHXqFzLRgo1fb6kqr2IDqVXe8dcxZdar5ITkgNYuZlEee"
+         data-bills-loader-csrf-token="u5usCd3UPw0IFtEGSYaoRbIRLyHCTpMmqR3dKTPZBQfVd1DQpGbxoccd5nnfIQIO"
          data-bills-loader-perms_user="44448"
          data-user-remark-user-id="27733"
-         data-user-remark-csrf-token="RiJirLpMjhJj6N9yKthaHXqFzLRgo1fb6kqr2IDqVXe8dcxZdar5ITkgNYuZlEee"
+         data-user-remark-csrf-token="u5usCd3UPw0IFtEGSYaoRbIRLyHCTpMmqR3dKTPZBQfVd1DQpGbxoccd5nnfIQIO"
          data-action="before-scrolling-to-page-bottom->bills-loader#load_more bills-loaded->user-remark#load">
       <form id="form_search" method="post" action=".">
-        <input type='hidden' name='csrfmiddlewaretoken' value='RiJirLpMjhJj6N9yKthaHXqFzLRgo1fb6kqr2IDqVXe8dcxZdar5ITkgNYuZlEee' />
+        <input type='hidden' name='csrfmiddlewaretoken' value='u5usCd3UPw0IFtEGSYaoRbIRLyHCTpMmqR3dKTPZBQfVd1DQpGbxoccd5nnfIQIO' />
         <div class="manage-form product-edit-tool order-manage-bar clear" style="padding-top: 10px; ">
           
             
@@ -1494,6 +1507,8 @@ $('#id_setting_user').click(function () {
                 <option value="746">ZP-711(B2C)</option>
               
                 <option value="8126">翰禹-大榮</option>
+              
+                <option value="11436">新竹-翰禹科技股份有限公司-05823460003-常溫</option>
               
               
               <option value="no">不支援物流API（自取/PC/蝦皮等）</option>
@@ -1701,14 +1716,14 @@ $('#id_setting_user').click(function () {
             </select>
             
             
-            <input type="text" name="begin" class="search order-manage-name" style="line-height: normal;width: calc(11% - 2.5px);display:none;" value="2025/04/20 00:00" placeholder="開始">
-            <input type="text" name="end" class="search order-manage-name" style="line-height: normal;width: calc(11% - 2.5px);display:none;" value="2025/04/23 00:00" placeholder="結束">
-            <input type="text" name="pay_begin" class="search order-manage-name" style="line-height: normal;width: calc(11% - 2.5px);display:none;" value="2025/04/20 00:00" placeholder="開始">
-            <input type="text" name="pay_end" class="search order-manage-name" style="line-height: normal;width: calc(11% - 2.5px);display:none;" value="2025/04/23 00:00" placeholder="結束">
-            <input type="text" name="shipnotes_checkout_begin" class="search order-manage-name" style="line-height: normal;width: calc(11% - 2.5px);display:none;" value="2025/04/20 00:00" placeholder="開始">
-            <input type="text" name="shipnotes_checkout_end" class="search order-manage-name" style="line-height: normal;width: calc(11% - 2.5px);display:none;" value="2025/04/23 00:00" placeholder="結束">
-            <input type="text" name="refunds_refund_begin" class="search order-manage-name" style="line-height: normal;width: calc(11% - 2.5px);display:none;" value="2025/04/20 00:00" placeholder="開始">
-            <input type="text" name="refunds_refund_end" class="search order-manage-name" style="line-height: normal;width: calc(11% - 2.5px);display:none;" value="2025/04/23 00:00" placeholder="結束">
+            <input type="text" name="begin" class="search order-manage-name" style="line-height: normal;width: calc(11% - 2.5px);display:none;" value="2025/04/24 00:00" placeholder="開始">
+            <input type="text" name="end" class="search order-manage-name" style="line-height: normal;width: calc(11% - 2.5px);display:none;" value="2025/04/27 00:00" placeholder="結束">
+            <input type="text" name="pay_begin" class="search order-manage-name" style="line-height: normal;width: calc(11% - 2.5px);display:none;" value="2025/04/24 00:00" placeholder="開始">
+            <input type="text" name="pay_end" class="search order-manage-name" style="line-height: normal;width: calc(11% - 2.5px);display:none;" value="2025/04/27 00:00" placeholder="結束">
+            <input type="text" name="shipnotes_checkout_begin" class="search order-manage-name" style="line-height: normal;width: calc(11% - 2.5px);display:none;" value="2025/04/24 00:00" placeholder="開始">
+            <input type="text" name="shipnotes_checkout_end" class="search order-manage-name" style="line-height: normal;width: calc(11% - 2.5px);display:none;" value="2025/04/27 00:00" placeholder="結束">
+            <input type="text" name="refunds_refund_begin" class="search order-manage-name" style="line-height: normal;width: calc(11% - 2.5px);display:none;" value="2025/04/24 00:00" placeholder="開始">
+            <input type="text" name="refunds_refund_end" class="search order-manage-name" style="line-height: normal;width: calc(11% - 2.5px);display:none;" value="2025/04/27 00:00" placeholder="結束">
             <input type="text" name="serial" class="search order-manage-name" style="line-height: normal;width: 20%;display:none;" value="">
             <input type="text" name="fb" class="search order-manage-name" style="line-height: normal;width: 20%;display:initial;" value="" autocomplete="off">
             <input type="text" name="commodity" class="search order-manage-name" style="line-height: normal;width: 20%;display:none;" value="" autocomplete="off">
@@ -1731,8 +1746,8 @@ $('#id_setting_user').click(function () {
             <input type="hidden" name="commodity_id" class="search" value="" />
             <input type="hidden" name="is_from_id" value="" />
             <style>.ui-menu-item .ui-menu-item-wrapper.ui-state-active {background: yellow !important;}</style>
-            <input type="hidden" name="default_order_by" value="asc">
-            <input type="hidden" name="default_order_item" value="amount">
+            <input type="hidden" name="default_order_by" value="desc">
+            <input type="hidden" name="default_order_item" value="date">
             <input type="hidden" name="kind" value="tobeshipped">
             <input type="hidden" name="selected_bill" value="">
             <input type="hidden" name="skip_check" value= "False">
@@ -1803,14 +1818,14 @@ $('#id_setting_user').click(function () {
             
             
             <th style="width: 85px;">付款單號</th>
-            <th>FB帳號<span data-item="from_id" class="default_order_switch arrow up-arrow"></span></th>
+            <th>FB帳號<span data-item="from_id" class="default_order_switch arrow desc-arrow"></span></th>
             <th>
-              <div>訂單筆數<span data-item="count" class="default_order_switch arrow up-arrow"></span></div>
+              <div>訂單筆數<span data-item="count" class="default_order_switch arrow desc-arrow"></span></div>
               
             </th>
-            <th>總金額<span data-item="amount" class="default_order_switch arrow up-arrow"></span></th>
+            <th>總金額<span data-item="amount" class="default_order_switch arrow desc-arrow"></span></th>
             <th style="width: 13%">付款方式</th>
-            <th style="width: 105px;">成立時間<span data-item="date" class="default_order_switch arrow up-arrow"></span></th>
+            <th style="width: 105px;">成立時間<span data-item="date" class="default_order_switch arrow desc-arrow"></span></th>
             <th>收件人資訊</th>
             <th>備註<button type="button" class="demo-icon btn-icon indent icon-columna-open btn-remarks-more ship-table-remarks-more" data-display="open"></button></th>
             <th>系統備註<button type="button" class="demo-icon btn-icon indent icon-columna-open btn-remarks-more ship-table-remarks-more" data-display="open"></button></th>
@@ -2716,6 +2731,36 @@ $('#fan_message_text').keydown(function(event) {
 <input id="user_id" class="user_id" type="hidden" value="44448">
 <input name="is_read" id="is_read" type="hidden" value="false">
 
+<div class="site-dialog server-billboard-308" style="display: none; padding:0;">
+  <header class="site-dialog-header">
+    <h1 style="width: 15%;">
+      <img src="https://s3.ap-northeast-2.amazonaws.com/jambolive.tv/static/console2/img/common/logo.png" alt="" title="JoJambo"style="width: 100%;">
+    </h1>
+    <h2 class="page-title theme">就醬播放送</h2>
+  </header>
+  <div class="site-dialog-content" style='min-height: 480px;'>
+  </div>
+  <footer style="bottom: 65px; width: 100%; text-align: center;">
+    <input id="billboard_read" class="billboard_read" type="checkbox" value="308">
+    <label for="billboard_read">我已經詳細閱讀此則訊息</label><br>
+  </footer>
+</div>
+
+<div class="site-dialog server-billboard-307" style="display: none; padding:0;">
+  <header class="site-dialog-header">
+    <h1 style="width: 15%;">
+      <img src="https://s3.ap-northeast-2.amazonaws.com/jambolive.tv/static/console2/img/common/logo.png" alt="" title="JoJambo"style="width: 100%;">
+    </h1>
+    <h2 class="page-title theme">就醬播放送</h2>
+  </header>
+  <div class="site-dialog-content" style='min-height: 480px;'>
+  </div>
+  <footer style="bottom: 65px; width: 100%; text-align: center;">
+    <input id="billboard_read" class="billboard_read" type="checkbox" value="307">
+    <label for="billboard_read">我已經詳細閱讀此則訊息</label><br>
+  </footer>
+</div>
+
 
 <script>
   function pop_dialog(billboard_queue=[],content_queue=[]){
@@ -2737,7 +2782,7 @@ $('#fan_message_text').keydown(function(event) {
         buttons: {
           "OK": function () {
             if ($('.billboard_read').is(":checked")) {
-              $.post(`/console/api/billboard/update/${user_id.value}/`, {csrfmiddlewaretoken: 'RiJirLpMjhJj6N9yKthaHXqFzLRgo1fb6kqr2IDqVXe8dcxZdar5ITkgNYuZlEee',}, function (response) {});
+              $.post(`/console/api/billboard/update/${user_id.value}/`, {csrfmiddlewaretoken: 'u5usCd3UPw0IFtEGSYaoRbIRLyHCTpMmqR3dKTPZBQfVd1DQpGbxoccd5nnfIQIO',}, function (response) {});
               $('input[name="is_read"]').val("true");
             };
             dialog.dialog("close");
@@ -2764,6 +2809,20 @@ $('#fan_message_text').keydown(function(event) {
     }
     var billboard_queue = [];
     var content_queue = [];
+    
+    if (first) {
+      billboard_queue.push('server-billboard-308');
+      content_queue.push(`<p><img src="https://i.imgur.com/0KoOQdr.jpeg" width="600" height="100%"  alt="五一金流公告" style="display: block;margin: 0 auto;"></p>`)
+    } else {
+      
+    }
+    
+    if (first) {
+      billboard_queue.push('server-billboard-307');
+      content_queue.push(`<p><a href="https://web.pchomepay.com.tw/announcement/info" target="_blank" ><img src="https://i.imgur.com/eoT4GGg.jpeg" width="600" height="100%"  alt="PChomePay51公告" style="display: block;margin: 0 auto;"></p>`)
+    } else {
+      
+    }
     
     pop_dialog(billboard_queue,content_queue);
     $('.site-dialog').on('dialogclose', function (event) {
@@ -2845,7 +2904,7 @@ function csrfSafeMethod(method) {
 		return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 	}
 
-var csrftoken = "RiJirLpMjhJj6N9yKthaHXqFzLRgo1fb6kqr2IDqVXe8dcxZdar5ITkgNYuZlEee";
+var csrftoken = "u5usCd3UPw0IFtEGSYaoRbIRLyHCTpMmqR3dKTPZBQfVd1DQpGbxoccd5nnfIQIO";
 $.ajaxSetup({
 	beforeSend: function (xhr, settings) {
 		if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -2854,7 +2913,7 @@ $.ajaxSetup({
 	}
 });
 </script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"933eba305faae3a0","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2025.4.0-1-g37f21b1","token":"c4c597f16d8e410b92a752d248622898"}' crossorigin="anonymous"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"93601c95e8327d01","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2025.4.0-1-g37f21b1","token":"c4c597f16d8e410b92a752d248622898"}' crossorigin="anonymous"></script>
 </body>
 </html>
 
@@ -4121,7 +4180,7 @@ $('#shipnote_no_import').change(function(event) {
   }
   let formData = new FormData();
   formData.append('file', files[0]);
-  formData.append('csrfmiddlewaretoken', 'RiJirLpMjhJj6N9yKthaHXqFzLRgo1fb6kqr2IDqVXe8dcxZdar5ITkgNYuZlEee')
+  formData.append('csrfmiddlewaretoken', 'u5usCd3UPw0IFtEGSYaoRbIRLyHCTpMmqR3dKTPZBQfVd1DQpGbxoccd5nnfIQIO')
   return fetch('/console/ship/shipnote/import/', {
     method: 'POST',
     body: formData,
@@ -4195,7 +4254,7 @@ function download(ids, kind, email=false, authenticator_pass=false, edc=false) {
       var csrfInput = document.createElement("input");
       csrfInput.type = "hidden";
       csrfInput.name = "csrfmiddlewaretoken";
-      csrfInput.value = "RiJirLpMjhJj6N9yKthaHXqFzLRgo1fb6kqr2IDqVXe8dcxZdar5ITkgNYuZlEee";
+      csrfInput.value = "u5usCd3UPw0IFtEGSYaoRbIRLyHCTpMmqR3dKTPZBQfVd1DQpGbxoccd5nnfIQIO";
       targetForm.appendChild(csrfInput);
       var targetInput = document.createElement("input");
       targetInput.type = "hidden";
@@ -4366,7 +4425,7 @@ function openTarget(ids, upload=false, reupload=false, edit=true, la='') {
   var csrfInput = document.createElement("input");
   csrfInput.type = "hidden";
   csrfInput.name = "csrfmiddlewaretoken";
-  csrfInput.value = "RiJirLpMjhJj6N9yKthaHXqFzLRgo1fb6kqr2IDqVXe8dcxZdar5ITkgNYuZlEee";
+  csrfInput.value = "u5usCd3UPw0IFtEGSYaoRbIRLyHCTpMmqR3dKTPZBQfVd1DQpGbxoccd5nnfIQIO";
   targetForm.appendChild(csrfInput);
   
   if(!la) {
@@ -4455,7 +4514,7 @@ function openInvoice(ids, action='print') {
   var csrfInput = document.createElement("input");
   csrfInput.type = "hidden";
   csrfInput.name = "csrfmiddlewaretoken";
-  csrfInput.value = "RiJirLpMjhJj6N9yKthaHXqFzLRgo1fb6kqr2IDqVXe8dcxZdar5ITkgNYuZlEee";
+  csrfInput.value = "u5usCd3UPw0IFtEGSYaoRbIRLyHCTpMmqR3dKTPZBQfVd1DQpGbxoccd5nnfIQIO";
   targetForm.appendChild(csrfInput);
   var actionInput = document.createElement("input");
   actionInput.type = "hidden";
@@ -4486,7 +4545,7 @@ function openPrint(ids, action='a4') {
   var csrfInput = document.createElement("input");
   csrfInput.type = "hidden";
   csrfInput.name = "csrfmiddlewaretoken";
-  csrfInput.value = "RiJirLpMjhJj6N9yKthaHXqFzLRgo1fb6kqr2IDqVXe8dcxZdar5ITkgNYuZlEee";
+  csrfInput.value = "u5usCd3UPw0IFtEGSYaoRbIRLyHCTpMmqR3dKTPZBQfVd1DQpGbxoccd5nnfIQIO";
   targetForm.appendChild(csrfInput);
   var actionInput = document.createElement("input");
   actionInput.type = "hidden";
