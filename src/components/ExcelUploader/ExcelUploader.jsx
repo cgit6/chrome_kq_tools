@@ -38,6 +38,7 @@ function findAllPaymentIdInPage() {
   rows.forEach((row, index) => {
     // 找到該行中所有含有 class="align-c" 的 p 標籤
     const alignCenterPs = row.querySelectorAll("td p.align-c");
+    const realName = row.querySelector("td p.account-ship-info span.ship_name");
 
     if (alignCenterPs.length > 0) {
       // 收集每個p標籤的文本
@@ -47,6 +48,7 @@ function findAllPaymentIdInPage() {
       results.push({
         rowIndex: index + 1, // 行數
         texts: textsInRow, // 付款單號
+        realName, // 姓名
       });
 
       // console.log(
@@ -56,7 +58,6 @@ function findAllPaymentIdInPage() {
     }
   });
 
-  // console.log(`總共在 ${results.length} 行中找到符合條件的元素`);
   return results;
 }
 
@@ -92,7 +93,7 @@ const ExcelUploader = () => {
   const [isProcessing, setIsProcessing] = useState(false); // 是否正在處理數據
   const [searchAttempts, setSearchAttempts] = useState(0); // 查找嘗試次數
   const [statusMessage, setStatusMessage] = useState(""); // 狀態訊息
-  // 當前處理的數據清單
+  const [data, setData] = useState([]); // 姓名,商品名稱,數量訊息
 
   const processExcelFile = async (file) => {
     try {
@@ -188,24 +189,69 @@ const ExcelUploader = () => {
     }
   };
 
-  // 打開與關閉彈出視窗
+  // 獲取彈出視窗中的訊息
+  const getPopupMessage = () => {
+    const results = {}; // 所有的搜尋結果
+
+    // 1. 獲取品項名稱和數量的欄位索引
+    let productNameColumnIndex = 2; // 品項名稱是第3欄（索引從0開始）
+    let amountColumnIndex = 7; // 數量是第8欄（索引從0開始）
+
+    // 2. 獲取表格內容
+    const tbody = document.querySelector(".ui-dialog tbody#target");
+    if (tbody) {
+      const rows = tbody.querySelectorAll("tr");
+      // console.log(`找到 ${rows.length} 筆訂單資料`);
+
+      // 3. 遍歷每一行獲取品項名稱和數量
+      rows.forEach((row, rowIndex) => {
+        const cells = row.querySelectorAll("td");
+
+        // 獲取品項名稱
+        const productNameCell = cells[productNameColumnIndex];
+        const productNameElement = productNameCell.querySelector("h3");
+        const productName = productNameElement
+          ? productNameElement.textContent.trim()
+          : "無品項名稱";
+
+        // 獲取數量
+        const amountCell = cells[amountColumnIndex];
+        const amountElement = amountCell.querySelector("p.quantity");
+        const amount = amountElement
+          ? amountElement.textContent.trim()
+          : "無數量資訊";
+
+        // 儲存找到的結果
+        results.productName = productName;
+        results.amount = amount;
+        // console.log(`訂單 ${rowIndex + 1}:`);
+        // console.log(`品項名稱: ${productName}`);
+        // console.log(`數量: ${amount}`);
+
+        return results;
+      });
+    } else {
+      console.log("未找到表格內容");
+    }
+  };
+
+  // 打開與關閉彈出視窗(嘗試獲取商品名稱)
   const handleOpenAndClosePopup = async (item, foundButton) => {
     console.log(`✓ 成功找到付款單號: ${item.paymentId}`);
     setStatusMessage(`✓ 成功找到付款單號: ${item.paymentId}`);
-    // 嘗試獲取商品名稱
-    // 模擬點擊 foundButton
+
     if (foundButton) {
+      // 1.模擬點擊 foundButton (打開詳細明細)
       foundButton.click(); // 模擬點擊按鈕
       console.log("已模擬點擊按鈕以開啟彈出視窗");
 
       // 等待彈出視窗加載
       await new Promise((resolve) => setTimeout(resolve, 1000)); // 等待1秒確保彈出窗口完全加載
 
-      // 獲取彈出視窗標籤
-      const popup = document.querySelector(".ui-dialog");
-      // console.log("popup: ", popup);
+      // 2.❗獲取彈出視窗中的訊息
+      const popupMessage = getPopupMessage();
 
-      // 直接選擇「關閉」按鈕 - 使用具體文本內容
+      // 3.直接選擇「關閉」按鈕 - 使用具體文本內容
       const closeButton = document.querySelector(
         ".ui-dialog-buttonpane .ui-dialog-buttonset button:last-child"
       );
@@ -219,6 +265,8 @@ const ExcelUploader = () => {
       } else {
         console.log("未找到關閉按鈕");
       }
+
+      return popupMessage;
     }
   };
 
@@ -247,7 +295,8 @@ const ExcelUploader = () => {
 
       // 如果有找到這筆資料(對結果做邏輯判斷)
       if (found) {
-        await handleOpenAndClosePopup(item, foundButton); // 打開與關閉彈出視窗
+        const name = null; // 獲取姓名
+        const productData = await handleOpenAndClosePopup(item, foundButton); // 打開與關閉彈出視窗
         return true;
       }
       // 如果沒有找到這筆資料(觸發懶加載)
@@ -299,7 +348,10 @@ const ExcelUploader = () => {
 
           // 對結果進行邏輯判斷
           if (found) {
-            await handleOpenAndClosePopup(item, foundButton); // 打開與關閉彈出視窗
+            const productData = await handleOpenAndClosePopup(
+              item,
+              foundButton
+            ); // 打開與關閉彈出視窗
             return true;
           }
 
