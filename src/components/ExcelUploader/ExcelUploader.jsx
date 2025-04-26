@@ -16,14 +16,14 @@ const findColumnName = (headers, possibleNames) => {
 };
 
 // 找到當前頁面清單中的所有付款單號訊息
-function findPaymentIdInPage() {
+function findAllPaymentIdInPage() {
   // 查找含有 data-target="bills-loader.container" 的 tbody
   const tbody = document.querySelector(
     'tbody[data-target="bills-loader.container"]'
   );
 
   if (!tbody) {
-    console.log("未找到目標tbody元素");
+    // console.log("未找到目標tbody元素");
     return null; // 返回空元素
   }
 
@@ -49,110 +49,35 @@ function findPaymentIdInPage() {
         texts: textsInRow, // 付款單號
       });
 
-      console.log(
-        `行 ${index + 1}: 找到 ${textsInRow.length} 個符合條件的元素`
-      );
-      console.log(`內容: ${textsInRow.join(", ")}`);
+      // console.log(
+      //   `行 ${index + 1}: 找到 ${textsInRow.length} 個符合條件的元素`
+      // );
+      // console.log(`內容: ${textsInRow.join(", ")}`);
     }
   });
 
-  console.log(`總共在 ${results.length} 行中找到符合條件的元素`);
+  // console.log(`總共在 ${results.length} 行中找到符合條件的元素`);
   return results;
 }
 
 // 在頁面上查找商品名稱
-const findProductNameInPage = () => {
+const findAllOrderButtonInPage = () => {
   // 找到包含付款單號的行
   const tbody = document.querySelector(
     'tbody[data-target="bills-loader.container"]'
   );
 
   if (!tbody) {
-    console.log("未找到目標tbody元素");
+    // console.log("未找到目標tbody元素");
     return null;
   }
 
-  const rows = tbody.querySelectorAll(
+  const button = tbody.querySelectorAll(
     'tr td div.product-edit-tool button[title="訂單明細"]'
   ); // 獲取所有行
 
-  console.log("rows: ", button);
-  // 找到對應的按鈕
-  // let targetButton = null;
-  // let targetRow = null;
-  // }
-
-  // 儲存當前彈出窗口的處理函數
-  // const originalDialogHandler = window.onDialogOpen;
-
-  // 創建一個 Promise 來等待彈出窗口並獲取數據
-  // return new Promise((resolve) => {
-  //   // 設置一個標誌，表示我們的處理函數已被調用
-  //   let handlerCalled = false;
-
-  //   // 監聽彈出窗口
-  //   window.onDialogOpen = function (dialog) {
-  //     // 防止重複調用
-  //     if (handlerCalled) return;
-  //     handlerCalled = true;
-
-  //     console.log("彈出窗口已打開，開始獲取商品名稱");
-
-  //     // 給彈出窗口一點時間完全加載
-  //     setTimeout(() => {
-  //       try {
-  //         // 獲取彈出窗口中的商品名稱
-  //         const productNameElement =
-  //           dialog.querySelector(".product-name") ||
-  //           dialog.querySelector(".item-name") ||
-  //           dialog.querySelector(".product-title");
-
-  //         let productName = null;
-  //         if (productNameElement) {
-  //           productName = productNameElement.textContent.trim();
-  //           console.log(`成功獲取商品名稱: ${productName}`);
-  //         } else {
-  //           console.log("未在彈出窗口中找到商品名稱元素");
-  //         }
-
-  //         // 關閉彈出窗口
-  //         const closeButton =
-  //           dialog.querySelector(".close-button") ||
-  //           dialog.querySelector(".modal-close") ||
-  //           dialog.querySelector("[data-dismiss='modal']");
-
-  //         if (closeButton) {
-  //           closeButton.click();
-  //           console.log("已關閉彈出窗口");
-  //         }
-
-  //         // 恢復原始處理函數
-  //         window.onDialogOpen = originalDialogHandler;
-
-  //         // 返回商品名稱
-  //         resolve(productName);
-  //       } catch (error) {
-  //         console.error("獲取商品名稱時發生錯誤:", error);
-  //         // 恢復原始處理函數
-  //         window.onDialogOpen = originalDialogHandler;
-  //         resolve(null);
-  //       }
-  //     }, 1000); // 等待1秒確保彈出窗口完全加載
-  // };
-
-  //   // 模擬點擊按鈕
-  //   console.log("點擊訂單明細按鈕");
-  //   targetButton.click();
-
-  //   // 設置超時，以防彈出窗口沒有打開
-  //   setTimeout(() => {
-  //     if (!handlerCalled) {
-  //       console.log("彈出窗口未打開，可能需要其他方式獲取商品名稱");
-  //       window.onDialogOpen = originalDialogHandler;
-  //       resolve(null);
-  //     }
-  //   }, 5000); // 5秒超時
-  // });
+  // console.log("button: ", button);
+  return button;
 };
 
 // 獲取商品名稱訊息
@@ -167,6 +92,7 @@ const ExcelUploader = () => {
   const [isProcessing, setIsProcessing] = useState(false); // 是否正在處理數據
   const [searchAttempts, setSearchAttempts] = useState(0); // 查找嘗試次數
   const [statusMessage, setStatusMessage] = useState(""); // 狀態訊息
+  // 當前處理的數據清單
 
   const processExcelFile = async (file) => {
     try {
@@ -262,19 +188,19 @@ const ExcelUploader = () => {
     }
   };
 
-  // 處理一筆數據
+  // 處理一筆數據(比對某一筆資料的函數)
   const processOneItem = async (item) => {
     try {
-      const productName = findProductNameInPage(); // 測試用的等下要刪掉
       setStatusMessage(
         `正在查找付款單號: ${item.paymentId} (嘗試次數: ${searchAttempts + 1})`
       );
 
       // 檢查付款單號是否存在於頁面中
-      const paymentInfos = findPaymentIdInPage(); // 找到當前頁面清單中的所有付款單號訊息
+      let paymentInfos = findAllPaymentIdInPage(); // 找到當前頁面清單中的所有付款單號訊息
+      let productName = findAllOrderButtonInPage(); // 找到當前頁面清單中的所有商品名稱按鈕
       let found = false;
 
-      // 開始進行查找的動作
+      // 開始進行查找(比對)的動作
       for (let i = 0; i < paymentInfos.length; i++) {
         const paymentInfo = paymentInfos.at(i).texts.at(0); // 假設第一個文本是付款單號
         if (paymentInfo === item.paymentId) {
@@ -283,12 +209,13 @@ const ExcelUploader = () => {
         }
       }
 
+      // 如果有找到這筆資料(對結果做邏輯判斷)
       if (found) {
         console.log(`✓ 成功找到付款單號: ${item.paymentId}`);
         setStatusMessage(`✓ 成功找到付款單號: ${item.paymentId}`);
 
         // 嘗試獲取商品名稱
-        // const productName = findProductNameInPage();
+        // const productName = findAllOrderButtonInPage();
         // if (productName) {
         //   console.log(`商品名稱: ${productName}`);
         //   setStatusMessage(
@@ -297,14 +224,16 @@ const ExcelUploader = () => {
         // }
 
         return true;
-      } else {
+      }
+      // 如果沒有找到這筆資料
+      else {
         // 如果查找次數小於最大嘗試次數，觸發懶加載
         if (searchAttempts < 5000) {
-          // 最多嘗試 50 次
-          console.log(
-            `未找到付款單號: ${item.paymentId}, 嘗試次數: ${searchAttempts + 1}`
-          );
-          setSearchAttempts((prev) => prev + 1);
+          // 最多嘗試 5000 次
+          // console.log(
+          //   `未找到付款單號: ${item.paymentId}, 嘗試次數: ${searchAttempts + 1}`
+          // );
+          setSearchAttempts((prev) => prev + 1); // 更新查找次數
           // 觸發懶加載
           if (
             window.lazyLoader &&
@@ -317,7 +246,7 @@ const ExcelUploader = () => {
           ) {
             // 備用方案，使用控制接口
             window.lazyLoadControl.start();
-            // 等待一段時間
+            // 等待一段時間(3秒)
             await new Promise((resolve) => setTimeout(resolve, 3000));
           } else {
             console.error("找不到懶加載控制器，請確保擴展已正確載入");
@@ -326,7 +255,21 @@ const ExcelUploader = () => {
               top: document.body.scrollHeight,
               behavior: "smooth",
             });
-            await new Promise((resolve) => setTimeout(resolve, 2000));
+            // 等待4秒
+            await new Promise((resolve) => setTimeout(resolve, 4000)); // 等待4秒
+          }
+
+          // 重新獲取
+          paymentInfos = findAllPaymentIdInPage(); // 重新獲取付款單號
+          productName = findAllOrderButtonInPage(); // 更新商品名稱的按鈕
+
+          // 再次進行比對
+          for (let i = 0; i < paymentInfos.length; i++) {
+            const paymentInfo = paymentInfos[i].texts[0]; // 假設第一個文本是付款單號
+            if (paymentInfo === item.paymentId) {
+              found = true;
+              break;
+            }
           }
 
           return false; // 沒找到，需要繼續查找
@@ -348,22 +291,23 @@ const ExcelUploader = () => {
     }
   };
 
-  // 使用 useEffect 處理數據
-  useEffect(() => {
-    let isMounted = true; // 是否已掛載
+  // 批次處理所有資料
+  const handleBatchCompareDate = () => {
+    let isMounted = true; // 是否已掛載(用來控制 lazyload 的開始/停止)
 
+    // 批次處理所有資料
     const processData = async () => {
       if (!isProcessing || currentIndex >= excelData.length) {
         return;
       }
 
-      const currentItem = excelData[currentIndex];
+      const currentItem = excelData[currentIndex]; // 取得當前資料
       const itemProcessed = await processOneItem(currentItem); // 處理當前項目
 
       if (isMounted) {
         if (itemProcessed) {
           // 完成當前項目處理，移動到下一項
-          setCurrentIndex((prev) => prev + 1);
+          setCurrentIndex((prev) => prev + 1); // 更新當前索引
           setSearchAttempts(0); // 重置嘗試次數
 
           if (currentIndex + 1 >= excelData.length) {
@@ -388,10 +332,18 @@ const ExcelUploader = () => {
 
       // 組件卸載時也確保停止懶加載
       if (window.lazyLoadControl) {
-        window.lazyLoadControl.stop();
+        window.lazyLoadControl.stop(); // 停止懶加載
       }
     };
-  }, [isProcessing, currentIndex, excelData, searchAttempts]);
+  };
+
+  // 使用 useEffect 處理數據
+  useEffect(handleBatchCompareDate, [
+    isProcessing,
+    currentIndex,
+    excelData,
+    searchAttempts,
+  ]);
 
   return (
     <div className="excel-uploader wide-uploader">
