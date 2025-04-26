@@ -188,7 +188,41 @@ const ExcelUploader = () => {
     }
   };
 
-  // 處理一筆數據(比對某一筆資料的函數)
+  // 打開與關閉彈出視窗
+  const handleOpenAndClosePopup = async (item, foundButton) => {
+    console.log(`✓ 成功找到付款單號: ${item.paymentId}`);
+    setStatusMessage(`✓ 成功找到付款單號: ${item.paymentId}`);
+    // 嘗試獲取商品名稱
+    // 模擬點擊 foundButton
+    if (foundButton) {
+      foundButton.click(); // 模擬點擊按鈕
+      console.log("已模擬點擊按鈕以開啟彈出視窗");
+
+      // 等待彈出視窗加載
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // 等待1秒確保彈出窗口完全加載
+
+      // 獲取彈出視窗標籤
+      const popup = document.querySelector(".ui-dialog");
+      // console.log("popup: ", popup);
+
+      // 直接選擇「關閉」按鈕 - 使用具體文本內容
+      const closeButton = document.querySelector(
+        ".ui-dialog-buttonpane .ui-dialog-buttonset button:last-child"
+      );
+      console.log("closeButton: ", closeButton);
+
+      // 如果關閉按鈕存在，則模擬點擊關閉按鈕
+      if (closeButton) {
+        closeButton.click(); // 模擬點擊關閉按鈕
+        console.log("已模擬點擊關閉按鈕以關閉彈出視窗");
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      } else {
+        console.log("未找到關閉按鈕");
+      }
+    }
+  };
+
+  // 處理一筆數據(比對某一筆資料的函數)返回 true => 找下一筆資料
   const processOneItem = async (item) => {
     try {
       setStatusMessage(
@@ -197,35 +231,26 @@ const ExcelUploader = () => {
 
       // 檢查付款單號是否存在於頁面中
       let paymentInfos = findAllPaymentIdInPage(); // 找到當前頁面清單中的所有付款單號訊息
-      let productName = findAllOrderButtonInPage(); // 找到當前頁面清單中的所有商品名稱按鈕
+      let productButtons = findAllOrderButtonInPage(); // 找到當前頁面清單中的所有商品名稱按鈕
       let found = false;
+      let foundButton = null; // 匹配上的那筆資料的按鈕
 
       // 開始進行查找(比對)的動作
       for (let i = 0; i < paymentInfos.length; i++) {
         const paymentInfo = paymentInfos.at(i).texts.at(0); // 假設第一個文本是付款單號
         if (paymentInfo === item.paymentId) {
           found = true;
+          foundButton = productButtons[i]; // 那個按鈕
           break;
         }
       }
 
       // 如果有找到這筆資料(對結果做邏輯判斷)
       if (found) {
-        console.log(`✓ 成功找到付款單號: ${item.paymentId}`);
-        setStatusMessage(`✓ 成功找到付款單號: ${item.paymentId}`);
-
-        // 嘗試獲取商品名稱
-        // const productName = findAllOrderButtonInPage();
-        // if (productName) {
-        //   console.log(`商品名稱: ${productName}`);
-        //   setStatusMessage(
-        //     `✓ 付款單號: ${item.paymentId}, 商品名稱: ${productName}`
-        //   );
-        // }
-
+        await handleOpenAndClosePopup(item, foundButton); // 打開與關閉彈出視窗
         return true;
       }
-      // 如果沒有找到這筆資料
+      // 如果沒有找到這筆資料(觸發懶加載)
       else {
         // 如果查找次數小於最大嘗試次數，觸發懶加載
         if (searchAttempts < 5000) {
@@ -259,9 +284,9 @@ const ExcelUploader = () => {
             await new Promise((resolve) => setTimeout(resolve, 4000)); // 等待4秒
           }
 
-          // 重新獲取
+          // 更新當前清單數據
           paymentInfos = findAllPaymentIdInPage(); // 重新獲取付款單號
-          productName = findAllOrderButtonInPage(); // 更新商品名稱的按鈕
+          productButtons = findAllOrderButtonInPage(); // 更新商品名稱的按鈕
 
           // 再次進行比對
           for (let i = 0; i < paymentInfos.length; i++) {
@@ -270,6 +295,12 @@ const ExcelUploader = () => {
               found = true;
               break;
             }
+          }
+
+          // 對結果進行邏輯判斷
+          if (found) {
+            await handleOpenAndClosePopup(item, foundButton); // 打開與關閉彈出視窗
+            return true;
           }
 
           return false; // 沒找到，需要繼續查找
@@ -301,6 +332,7 @@ const ExcelUploader = () => {
         return;
       }
 
+      // 這邊應該要用 for loop 跑批次
       const currentItem = excelData[currentIndex]; // 取得當前資料
       const itemProcessed = await processOneItem(currentItem); // 處理當前項目
 
@@ -324,7 +356,7 @@ const ExcelUploader = () => {
     };
 
     if (isProcessing && excelData.length > 0) {
-      processData();
+      processData(); // 執行批次處理所有資料的動作
     }
 
     return () => {
