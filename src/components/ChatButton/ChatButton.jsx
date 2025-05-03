@@ -7,6 +7,9 @@ const ChatButton = forwardRef((props, ref) => {
   const imageSrc = chrome.runtime.getURL("helloboy.png"); // 圖片
   const [isOpen, setIsOpen] = useState(false); // 控制聊天窗口的打開和關閉
 
+  // 儲存找到的數據的狀態
+  // const [foundData, setFoundData] = useState([]);
+
   // 定义 toggleChat 函数
   const toggleChat = () => {
     setIsOpen(!isOpen);
